@@ -1,6 +1,6 @@
 import { Metadata } from "next"
 import { Header } from "@/components/Blufacade/Header"
-import { Preloader } from "@/components/Blufacade/Preloader"
+
 import { HeroSection } from "@/components/Blufacade/HeroSection"
 import { HeroTextSection } from "@/components/Blufacade/HeroTextSection"
 import { ServicesSection } from "@/components/Blufacade/ServicesSection"
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <>
-      <Preloader />
+
       <main className="relative w-full overflow-x-hidden">
         <Header />
         <HeroSection />

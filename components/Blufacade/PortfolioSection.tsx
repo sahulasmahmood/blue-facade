@@ -114,8 +114,8 @@ export function PortfolioSection() {
             Explore our portfolio of iconic facade projects
           </p>
         </div>
-        <div className="animate-bounce text-[#f58420] text-xs">
-          {isMobile ? "↓ Swipe to View" : "↓ Scroll to Navigate"}
+        <div className={`text-[#f58420] text-xs ${isMobile ? "animate-pulse" : "animate-bounce"}`}>
+          {isMobile ? "Swipe to View →" : "↓ Scroll to Navigate"}
         </div>
       </div>
 
@@ -239,9 +239,7 @@ export function PortfolioSection() {
               ))}
             </div>
             
-            <div className="text-center mt-4 text-xs text-[#282828]/50">
-              Swipe left to see more →
-            </div>
+
           </div>
         </>
       )}

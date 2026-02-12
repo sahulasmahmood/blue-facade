@@ -1,7 +1,7 @@
 "use client"
 
-import { useRef, useState, useEffect } from "react"
-import { motion, useScroll, useTransform, useSpring } from "framer-motion"
+import { useState, useEffect } from "react"
+import { motion } from "framer-motion"
 import { ArrowRight, Building2, Award, Users } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Particles } from "@/components/ui/particles"
@@ -9,7 +9,6 @@ import Link from "next/link"
 import { useBanner } from "@/hooks/use-banner"
 
 export function HeroSection() {
-  const containerRef = useRef<HTMLDivElement>(null)
   const [isReady, setIsReady] = useState(false)
   const { banner } = useBanner("home")
 
@@ -17,31 +16,6 @@ export function HeroSection() {
     const timer = setTimeout(() => setIsReady(true), 300)
     return () => clearTimeout(timer)
   }, [])
-
-  const [isMobile, setIsMobile] = useState(false)
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768)
-    }
-    checkMobile()
-    window.addEventListener("resize", checkMobile)
-    return () => window.removeEventListener("resize", checkMobile)
-  }, [])
-
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end start"],
-  })
-
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001,
-  })
-
-  const heroOpacity = useTransform(smoothProgress, [0, 0.5], [1, 0])
-  const heroScale = useTransform(smoothProgress, [0, 0.5], [1, 0.95])
 
   // Determine the image source
   const heroImage = banner?.images?.[0] || banner?.image || "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80"
@@ -53,12 +27,7 @@ export function HeroSection() {
   ]
 
   return (
-    <motion.section
-      ref={containerRef}
-      style={{ 
-        opacity: isMobile ? 1 : heroOpacity, 
-        scale: isMobile ? 1 : heroScale 
-      }}
+    <section
       className="relative min-h-[75vh] md:min-h-[80vh] flex items-center overflow-hidden bg-[#fefaf6]"
     >
       {/* Particles Background */}
@@ -178,6 +147,6 @@ export function HeroSection() {
           </motion.div>
         </div>
       </div>
-    </motion.section>
+    </section>
   )
 }
