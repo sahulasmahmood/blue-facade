@@ -34,22 +34,6 @@ export default function BlogContent() {
 
   return (
     <div className="bg-[#fefaf6]">
-      {/* Hero Section */}
-      <div className="bg-gradient-to-br from-[#014a74] to-[#014a74]/80 text-white py-20 md:py-32">
-        <div className="container mx-auto px-6 md:px-12">
-          <div className="max-w-3xl">
-            <span className="text-xs md:text-sm font-bold tracking-widest text-[#f58420] uppercase">
-              Our Blog
-            </span>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mt-4 mb-6">
-              Insights & Updates
-            </h1>
-            <p className="text-lg md:text-xl text-white/80">
-              Stay informed with the latest trends, tips, and news from the facade industry
-            </p>
-          </div>
-        </div>
-      </div>
 
       <div className="container mx-auto px-6 md:px-12 py-12 md:py-16">
         {/* Search and Filter */}

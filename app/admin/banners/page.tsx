@@ -24,6 +24,8 @@ export default function BannersPage() {
     { key: "about", label: "About Us" },
     { key: "services", label: "Services" },
     { key: "portfolio", label: "Portfolio" },
+    { key: "blog", label: "Blog" },
+    { key: "careers", label: "Careers" },
     { key: "contact", label: "Contact" },
   ];
 

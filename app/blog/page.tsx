@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import BlogContent from "@/components/Blog/BlogContent";
 import { Header } from "@/components/Blufacade/Header";
 import { Footer } from "@/components/Blufacade/Footer";
+import { DynamicPageBanner } from "@/components/DynamicPageBanner";
 
 export const metadata: Metadata = {
   title: "Blog | Blufacade - Facade Industry Insights & News",
@@ -14,6 +15,14 @@ export default function BlogPage() {
     <>
       <Header />
       <main className="min-h-screen">
+        <DynamicPageBanner
+          pageKey="blog"
+          title="Insights & Updates"
+          breadcrumb={[
+            { label: "Home", href: "/" },
+            { label: "Blog", href: "/blog" },
+          ]}
+        />
         <BlogContent />
       </main>
       <Footer />

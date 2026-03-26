@@ -2,18 +2,11 @@
 
 import { useClientLogos } from '@/hooks/use-client-logos';
 import { Loader2 } from 'lucide-react';
-import Image from 'next/image';
-import { useEffect, useState } from 'react';
 
 export function ClientLogosSection() {
   const { clientLogos, isLoading } = useClientLogos(true);
-  const [isMounted, setIsMounted] = useState(false);
 
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  if (!isMounted || isLoading) {
+  if (isLoading) {
     return (
       <section className="py-12 bg-white">
         <div className="container mx-auto px-6">
@@ -29,11 +22,16 @@ export function ClientLogosSection() {
     return null;
   }
 
-  // Duplicate logos for seamless loop
-  const duplicatedLogos = [...clientLogos, ...clientLogos];
+  // Repeat logos enough times so strip always looks packed (target ~16+ items)
+  const minItems = 16;
+  const repeatCount = Math.ceil(minItems / clientLogos.length) + 1;
+  const strip = Array.from({ length: repeatCount }, () => clientLogos).flat();
+
+  // Duration: ~2.5s per logo so speed feels consistent regardless of count
+  const duration = clientLogos.length * 2.5;
 
   return (
-    <section className="py-20 bg-white overflow-hidden">
+    <section className="py-16 md:py-20 bg-white overflow-hidden">
       <div className="container mx-auto px-6 mb-10">
         <div className="text-center mb-4">
           <p className="text-[#f58420] font-black text-xl tracking-widest uppercase mb-4">
@@ -50,25 +48,25 @@ export function ClientLogosSection() {
 
       <div className="relative">
         {/* Gradient Overlays */}
-        <div className="absolute left-0 top-0 bottom-0 w-32 bg-linear-to-r from-white to-transparent z-10" />
-        <div className="absolute right-0 top-0 bottom-0 w-32 bg-linear-to-l from-white to-transparent z-10" />
+        <div className="absolute left-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
 
-        {/* Marquee Container */}
-        <div className="marquee-container">
-          <div className="marquee-content">
-            {duplicatedLogos.map((logo, index) => (
-              <div
-                key={`${logo._id}-${index}`}
-                className="marquee-item shrink-0 mx-8"
-              >
-                <div className="relative w-52 h-20 transition-all duration-300 hover:scale-105">
-                  <Image
-                    src={logo.logo}
-                    alt={logo.name}
-                    fill
-                    className="object-contain"
-                  />
-                </div>
+        {/* Marquee */}
+        <div className="marquee-outer">
+          <div
+            className="marquee-track"
+            style={{ animationDuration: `${duration}s` }}
+          >
+            {strip.map((logo, index) => (
+              <div key={`${logo._id}-${index}`} className="marquee-item">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={logo.logo}
+                  alt={logo.name}
+                  loading={index < clientLogos.length ? 'eager' : 'lazy'}
+                  decoding="async"
+                  className="logo-img"
+                />
               </div>
             ))}
           </div>
@@ -76,35 +74,58 @@ export function ClientLogosSection() {
       </div>
 
       <style jsx>{`
-        .marquee-container {
+        .marquee-outer {
           width: 100%;
           overflow: hidden;
         }
 
-        .marquee-content {
+        .marquee-track {
           display: flex;
           align-items: center;
-          animation: logos-marquee 30s linear infinite;
+          width: max-content;
+          animation: marquee-scroll linear infinite;
           will-change: transform;
+          transform: translateZ(0);
         }
 
-        .marquee-content:hover {
+        .marquee-track:hover {
           animation-play-state: paused;
         }
 
-        @keyframes logos-marquee {
-          0% {
-            transform: translateX(0);
+        .marquee-item {
+          flex-shrink: 0;
+          padding: 0 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .logo-img {
+          height: 48px;
+          width: auto;
+          max-width: 120px;
+          object-fit: contain;
+          filter: grayscale(20%);
+          transition: filter 0.3s;
+        }
+
+        .logo-img:hover {
+          filter: grayscale(0%);
+        }
+
+        @media (min-width: 768px) {
+          .marquee-item {
+            padding: 0 32px;
           }
-          100% {
-            transform: translateX(-50%);
+          .logo-img {
+            height: 64px;
+            max-width: 160px;
           }
         }
 
-        @media (max-width: 768px) {
-          .marquee-content {
-            animation-duration: 20s;
-          }
+        @keyframes marquee-scroll {
+          0%   { transform: translateX(0); }
+          100% { transform: translateX(calc(-100% / ${repeatCount})); }
         }
       `}</style>
     </section>

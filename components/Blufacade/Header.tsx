@@ -1,13 +1,15 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Menu, X, ChevronDown } from "lucide-react"
+import { Menu, X, ChevronDown, Instagram, Linkedin, Facebook, Twitter, Youtube, MessageCircle, Send } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useServices } from "@/hooks/use-services"
 import { usePortfolio } from "@/hooks/use-portfolio"
+import { useContact } from "@/hooks/use-contact"
+import { siteConfig } from "@/config/site"
 
 const navItems = [
   { label: "HOME", href: "/" },
@@ -28,6 +30,45 @@ export function Header() {
   
   const { services } = useServices(1, 100)
   const { portfolios } = usePortfolio(1, 100)
+  const { contactInfo } = useContact()
+
+  const mobileSocialLinks = [
+    {
+      label: "Instagram",
+      href: contactInfo?.instagram || siteConfig.social.instagram,
+      icon: <Instagram className="w-5 h-5" />,
+    },
+    {
+      label: "LinkedIn",
+      href: contactInfo?.linkedin || siteConfig.social.linkedin,
+      icon: <Linkedin className="w-5 h-5" />,
+    },
+    {
+      label: "Facebook",
+      href: contactInfo?.facebook || siteConfig.social.facebook,
+      icon: <Facebook className="w-5 h-5" />,
+    },
+    {
+      label: "Twitter",
+      href: contactInfo?.twitter,
+      icon: <Twitter className="w-5 h-5" />,
+    },
+    {
+      label: "YouTube",
+      href: contactInfo?.youtube,
+      icon: <Youtube className="w-5 h-5" />,
+    },
+    {
+      label: "WhatsApp",
+      href: contactInfo?.whatsapp,
+      icon: <MessageCircle className="w-5 h-5" />,
+    },
+    {
+      label: "Telegram",
+      href: contactInfo?.telegram,
+      icon: <Send className="w-5 h-5" />,
+    },
+  ].filter((s) => Boolean(s.href))
 
   // Check if we're on the home page
   const isHomePage = pathname === "/"
@@ -261,16 +302,21 @@ export function Header() {
                   open: { opacity: 1, y: 0 },
                   closed: { opacity: 0, y: 20 },
                 }}
-                className="mt-12 flex justify-center gap-6"
+                className="mt-12 flex justify-center gap-4"
               >
-                {["INSTAGRAM", "LINKEDIN", "FACEBOOK"].map((social) => (
+                {mobileSocialLinks.map((social) => (
                   <motion.a
-                    key={social}
-                    whileHover={{ scale: 1.1, color: "#f58420" }}
-                    href="#"
-                    className="text-sm font-bold text-white/60 hover:text-[#f58420] transition-colors"
+                    key={social.label}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={social.label}
+                    whileHover={{ scale: 1.2 }}
+                    whileTap={{ scale: 0.9 }}
+                    onClick={() => setMenuOpen(false)}
+                    className="w-11 h-11 rounded-full border border-white/30 flex items-center justify-center text-white/70 hover:text-[#f58420] hover:border-[#f58420] transition-colors"
                   >
-                    {social}
+                    {social.icon}
                   </motion.a>
                 ))}
               </motion.div>

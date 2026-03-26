@@ -9,10 +9,17 @@ export async function GET() {
 
     const clientLogos = await ClientLogo.find({ isActive: true }).sort({ order: 1, createdAt: -1 });
 
-    return NextResponse.json({
-      success: true,
-      data: clientLogos,
-    });
+    return NextResponse.json(
+      {
+        success: true,
+        data: clientLogos,
+      },
+      {
+        headers: {
+          'Cache-Control': 'public, s-maxage=600, stale-while-revalidate=3600',
+        },
+      }
+    );
   } catch (error: any) {
     console.error('Error fetching client logos:', error);
     return NextResponse.json(

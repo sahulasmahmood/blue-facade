@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import useSWR from 'swr';
 
 interface ClientLogo {
   _id: string;
@@ -10,55 +10,25 @@ interface ClientLogo {
   updatedAt: string;
 }
 
+const fetcher = (url: string) => fetch(url).then((r) => r.json());
+
 export function useClientLogos(activeOnly: boolean = true) {
-  const [clientLogos, setClientLogos] = useState<ClientLogo[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const endpoint = activeOnly ? '/api/client-logos' : '/api/admin/client-logos';
 
-  const fetchClientLogos = async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
-      const endpoint = activeOnly ? '/api/client-logos' : '/api/admin/client-logos';
-      
-      const headers: HeadersInit = {};
-      
-      // Add authorization header for admin endpoint
-      if (!activeOnly && typeof window !== 'undefined') {
-        const token = localStorage.getItem('admin_token');
-        if (token) {
-          headers['Authorization'] = `Bearer ${token}`;
-        }
-      }
-      
-      const response = await fetch(endpoint, { headers });
-      const data = await response.json();
-
-      if (response.ok && data.success) {
-        setClientLogos(data.data);
-        setError(null);
-      } else {
-        const errorMessage = data.message || `HTTP ${response.status}: ${response.statusText}`;
-        setError(errorMessage);
-        console.error('API Error:', data);
-      }
-    } catch (err: any) {
-      const errorMessage = err.message || 'Network error occurred';
-      setError(errorMessage);
-      console.error('Network Error:', err);
-    } finally {
-      setIsLoading(false);
+  const { data, error, isLoading, mutate } = useSWR<{ success: boolean; data: ClientLogo[] }>(
+    endpoint,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+      revalidateIfStale: false,
+      dedupingInterval: 600000, // Cache for 10 minutes
     }
-  };
-
-  useEffect(() => {
-    fetchClientLogos();
-  }, [activeOnly]);
+  );
 
   return {
-    clientLogos,
+    clientLogos: data?.data ?? [],
     isLoading,
     error,
-    refetch: fetchClientLogos,
+    refetch: mutate,
   };
 }
