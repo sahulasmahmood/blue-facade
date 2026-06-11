@@ -7,6 +7,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { DynamicMetadata } from "@/components/DynamicMetadata";
 import { SmoothCursor } from "@/components/ui/smooth-cursor";
 import FloatingContactButtons from "@/components/FloatingContactButtons";
+import { StructuredData } from "@/components/StructuredData";
+import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -38,12 +40,21 @@ export const metadata: Metadata = {
     siteName: "Blufacade",
     type: "website",
     locale: "en_IN",
+    images: [
+      {
+        url: "/android-chrome-512x512.png",
+        width: 512,
+        height: 512,
+        alt: "Blufacade - Premium Facade Solutions",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Blufacade | Inspiring Skylines",
     description:
       "Premium facade solutions that redefine the visual identity of modern buildings.",
+    images: ["/android-chrome-512x512.png"],
   },
 };
 
@@ -57,6 +68,7 @@ export default function RootLayout({
       <head>
         <link rel="manifest" href="/site.webmanifest" />
         <meta name="theme-color" content="#014a74" />
+        <StructuredData />
       </head>
       <body
         className={`${poppins.variable} ${openSans.variable} font-sans antialiased`}
@@ -68,6 +80,7 @@ export default function RootLayout({
         <FloatingContactButtons />
         <Toaster />
         <Analytics />
+        <GoogleAnalytics />
       </body>
     </html>
   );

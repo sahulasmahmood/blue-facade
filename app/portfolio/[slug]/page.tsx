@@ -75,6 +75,17 @@ export async function generateMetadata({ params }: PageProps) {
     keywords:
       portfolioData.seoKeywords ||
       `${portfolioData.projectName}, facade project, ${portfolioData.location}, Blufacade projects`,
+    alternates: {
+      canonical: `/portfolio/${resolvedParams.slug}`,
+    },
+    openGraph: {
+      title: portfolioData.seoTitle || portfolioData.projectName,
+      description:
+        portfolioData.seoDescription ||
+        portfolioData.description.substring(0, 160),
+      type: "website",
+      ...(portfolioData.image ? { images: [portfolioData.image] } : {}),
+    },
   };
 }
 

@@ -76,6 +76,15 @@ export async function generateMetadata({ params }: PageProps) {
     keywords:
       serviceData.seoKeywords ||
       `${serviceData.serviceName}, facade solutions, ACP cladding, structural glazing, Blufacade`,
+    alternates: {
+      canonical: `/services/${resolvedParams.slug}`,
+    },
+    openGraph: {
+      title: serviceData.seoTitle || serviceData.serviceName,
+      description: serviceData.seoDescription || serviceData.description,
+      type: "website",
+      ...(serviceData.image ? { images: [serviceData.image] } : {}),
+    },
   };
 }
 

@@ -79,6 +79,9 @@ export async function generateMetadata({ params }: PageProps) {
     keywords:
       supportModelData.seoKeywords ||
       `${supportModelData.projectName}, facade solutions, architectural solutions, Blufacade`,
+    alternates: {
+      canonical: `/support-model/${resolvedParams.slug}`,
+    },
   };
 }
 
