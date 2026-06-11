@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { TopBar } from "@/components/top-bar";
 import { Header } from "@/components/header";
 import { DynamicPageBanner } from "@/components/DynamicPageBanner";
@@ -5,6 +6,15 @@ import { Footer } from "@/components/footer";
 import { CtaBanner } from "@/components/cta-banner";
 import { Check, HelpCircle, FileText, Users } from "lucide-react";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "NDIS | Blufacade",
+  description:
+    "Information about the NDIS, eligibility and how Blufacade can support you. Find answers to frequently asked questions about disability support services.",
+  alternates: {
+    canonical: "/ndis",
+  },
+};
 
 export default function NdisPage() {
   const faqs = [

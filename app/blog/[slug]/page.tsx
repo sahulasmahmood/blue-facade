@@ -29,6 +29,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: blog.seoTitle || `${blog.title} | Blufacade Blog`,
       description: blog.seoDescription || blog.excerpt,
       keywords: blog.seoKeywords || blog.tags?.join(", "),
+      alternates: {
+        canonical: `/blog/${slug}`,
+      },
       openGraph: {
         title: blog.seoTitle || blog.title,
         description: blog.seoDescription || blog.excerpt,
