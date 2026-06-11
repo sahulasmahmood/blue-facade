@@ -3,20 +3,19 @@ import Script from "next/script";
 /**
  * Google Analytics 4.
  *
- * Reads the Measurement ID from NEXT_PUBLIC_GA_ID. If the env var is not set
- * (e.g. local dev, or before a GA4 property is created) this renders nothing,
- * so the site works fine without it. To enable: create a GA4 property at
- * https://analytics.google.com, then set NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX.
+ * Rendered once from the root layout, so the gtag.js tag is injected into the
+ * <head> of every page automatically (no per-page pasting needed).
+ *
+ * The Measurement ID is hardcoded below. (A GA4 Measurement ID is public — it
+ * ships in the page HTML — so this is safe.)
  */
+const GA_ID = "G-3FGTMHG8RP";
+
 export function GoogleAnalytics() {
-  const gaId = process.env.NEXT_PUBLIC_GA_ID;
-
-  if (!gaId) return null;
-
   return (
     <>
       <Script
-        src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+        src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
         strategy="afterInteractive"
       />
       <Script id="ga4-init" strategy="afterInteractive">
@@ -24,7 +23,7 @@ export function GoogleAnalytics() {
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
-          gtag('config', '${gaId}');
+          gtag('config', '${GA_ID}');
         `}
       </Script>
     </>
